@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["localhost"]
 # Application definition
 
 INSTALLED_APPS = [
+    "cities.apps.CitiesConfig",
     "flights.apps.FlightsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
