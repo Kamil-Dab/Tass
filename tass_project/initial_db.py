@@ -6,6 +6,30 @@ import csv
 from django.db import transaction
 
 from flights.models import Airport, Flight
+from cities.models import City
+
+
+print("import cities")
+with open("./data/city.csv", "r") as file:
+    rf = csv.DictReader(file, fieldnames=["custom_id","city","city_ascii","state_id","state_name","lat","lng","population","density","timezone","id"])
+    cities = []
+    for i, record in tqdm(enumerate(rf)):
+        if i ==0:
+            continue
+        cities.append(City(
+            city=record["city"],
+            city_ascii=record["city_ascii"],
+            state_id=record["state_id"],
+            state_name=record["state_name"],
+            lat=record["lat"],
+            lng=record["lng"],
+            population=record["population"],
+            density=record["density"],
+            timezone=record["timezone"],
+            ))
+    with transaction.atomic():
+        City.objects.bulk_create(cities)
+print("import cities done")
 
 
 print("import airports")
