@@ -4,6 +4,8 @@ from django.db import models
 class Airport(models.Model):
     code = models.PositiveIntegerField(unique=True,null=False, blank=False)
     description = models.CharField(max_length=100)
+    lat = models.FloatField(null=True)
+    lng = models.FloatField(null=True)
 
 class Flight(models.Model):
     itin_id = models.PositiveBigIntegerField(null=False, blank=False)
