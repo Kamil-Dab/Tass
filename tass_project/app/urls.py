@@ -14,8 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
+from django.views.generic.base import RedirectView
+from flights.views import MapView, RankingView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("map/", MapView.as_view(), name="interactive_map"),
+    path("ranking/", RankingView.as_view(), name="ranking"),
+    re_path(r'^.*$', RedirectView.as_view(url='map/', permanent=False), name='index')
 ]

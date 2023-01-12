@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from django.views.generic import TemplateView
 
-# Create your views here.
+
+class MapView(TemplateView):
+    template_name = "interactive_map.html"
+
+
+class RankingView(TemplateView):
+    template_name = "ranking.html"
+

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+<link rel="stylesheet" href="{% static 'styles/interactive_map.css' %}">
+{% endblock head %}
+{% block body %}
+
+<div class="container m-3">
+    <div class="map-container">
+        <div id="map"></div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block javascript %}
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<script src="{% static 'scripts/interactive_map.js' %}"></script>
+{% endblock javascript %}
