@@ -1,3 +1,29 @@
 <div>
-    Search tab
+    <div class="row">
+        <div class="col m-3">
+            <div class="input-group">
+                <input id="city-search-input" type="text" class="form-control" placeholder="Search by city name..">
+                <button id="city-search-btn" class="btn btn-primary" type="button">Search</button>
+                <button id="city-search-clear-btn" class="btn btn-danger" type="button">Clear</button>
+            </div>
+        </div>
+    </div>
+    <div class="table-wrapper">
+        <table class="table" id="search-city-table">
+            <thead>
+                <tr>
+                    <th scope="col">City</th>
+                    <th scope="col">Population</th>
+                    <th scope="col">Rating</th>
+                </tr>
+            </thead>
+            <tbody class="overflow-scroll">
+                <tr class="city-row" data-lat="" data-lng="">
+                    <td class="city-name"></td>
+                    <td class="city-population"></td>
+                    <td class="city-rating"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>

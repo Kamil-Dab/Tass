@@ -8,13 +8,13 @@
                 <th scope="col">Rating</th>
             </tr>
         </thead>
-        <tbody class="overflow-scroll">
+        <tbody>
             {% for city in top_cities %}
-            <tr class="top-city-row" data-lat="{{ city.lat }}" data-lng="{{ city.lng }}">
-                <td class="top-city-place">{{ forloop.counter }}</td>
-                <td class="top-city-name">{{ city.city }}</td>
-                <td class="top-city-population">{{ city.population }}</td>
-                <td class="top-city-rating">{{ city.rating }}</td>
+            <tr class="city-row" data-lat="{{ city.lat }}" data-lng="{{ city.lng }}">
+                <td class="city-place">{{ forloop.counter }}</td>
+                <td class="city-name">{{ city.city }}</td>
+                <td class="city-population">{{ city.population }}</td>
+                <td class="city-rating">{{ city.rating }}</td>
             </tr>
             {% endfor %}
         </tbody>
