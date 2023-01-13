@@ -1,7 +1,10 @@
 import CustomMarker from "./helpers/custom_marker.js";
 import generateGradient from './helpers/generate_gradient.js';
+import numberFormatter from './helpers/number_formatter.js';
 
 $( document ).ready(function() {
+    setupRatingSlider();
+    setupPopulationSlider();
     var map = L.map('map', {scrollWheelZoom: true});
     map.setView([39.518, -99.843], 5);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -10,6 +13,47 @@ $( document ).ready(function() {
     rankingHandler(map);
     searchHandler(map);
 });
+
+function setupRatingSlider() {
+    $("#rating-slider").slider({
+        min: 0,
+        max: 10,
+        step: 0.1,
+        values: [0, 10],
+        slide: function(event, ui) {
+            let output = $("#rating-output > span");
+            let outputStr = ""
+            let chosenValues = ui.values.sort((a,b) => {return (a - b)});
+            if (chosenValues[0] < chosenValues[1]) {
+                outputStr = chosenValues[0].toFixed(1) + " - " + chosenValues[1].toFixed(1);
+            } else {
+                outputStr = chosenValues[0].toFixed(1);
+            }
+            output.text(outputStr);
+        }
+    })
+}
+
+function setupPopulationSlider() {
+    let maxPopulation = $("#population-slider").attr("data-max-population");
+    $("#population-slider").slider({
+        min: 0,
+        max: maxPopulation,
+        step: maxPopulation / 1000,
+        values: [0, maxPopulation],
+        slide: function(event, ui) {
+            let output = $("#population-output > span");
+            let outputStr = ""
+            let chosenValues = ui.values.sort((a,b) => {return (a - b)});
+            if (chosenValues[0] < chosenValues[1]) {
+                outputStr = numberFormatter(chosenValues[0], 1) + " - " + numberFormatter(chosenValues[1], 1);
+            } else {
+                outputStr = numberFormatter(chosenValues[0], 1);
+            }
+            output.text(outputStr);
+        }
+    })
+}
 
 function rankingHandler(map) {
     createMarkersForRows(map, $("#top-city-table").find(".city-row"), "ranking-tab");
@@ -22,7 +66,9 @@ function searchHandler(map) {
             url: "/api/city/",
             type: "GET",
             data: {
-                'query': $("#city-search-input").val()
+                'query': $("#city-search-input").val(),
+                'population': JSON.stringify($("#population-slider").slider("values").sort((a,b) => {return (a - b)})),
+                'rating': JSON.stringify($("#rating-slider").slider("values").sort((a,b) => {return (a - b)})),
             },
             success: function(response){
                 fillSearchTable(response);

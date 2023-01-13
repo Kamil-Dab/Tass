@@ -85,7 +85,7 @@ with open("./data/flights.csv", "r") as file:
             mkt_id=record["MktID"],
             quarter=record["Quarter"],
             origin_airport=airports[int(record["OriginAirportID"])],
-            dest_airport=airports[int(record["OriginAirportID"])],
+            dest_airport=airports[int(record["DestAirportID"])],
             passengers=int(float(record["Passengers"])),
             distance=int(float(record["MktDistance"])),
         ))
