@@ -1,0 +1,22 @@
+<div class="table-wrapper">
+    <table class="table" id="top-city-table">
+        <thead>
+            <tr>
+                <th scope="col">Lp</th>
+                <th scope="col">City</th>
+                <th scope="col">Population</th>
+                <th scope="col">Rating</th>
+            </tr>
+        </thead>
+        <tbody class="overflow-scroll">
+            {% for city in top_cities %}
+            <tr class="top-city-row" data-lat="{{ city.lat }}" data-lng="{{ city.lng }}">
+                <td class="top-city-place">{{ forloop.counter }}</td>
+                <td class="top-city-name">{{ city.city }}</td>
+                <td class="top-city-population">{{ city.population }}</td>
+                <td class="top-city-rating">{{ city.rating }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

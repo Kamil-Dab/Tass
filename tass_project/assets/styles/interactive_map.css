@@ -1,3 +1,7 @@
 #map {
     min-height: 90vh;
 }
+.table-wrapper {
+    max-height: 85vh;
+    overflow: scroll;
+}

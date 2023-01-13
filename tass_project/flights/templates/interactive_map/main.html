@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+<link rel="stylesheet" href="{% static 'styles/interactive_map.css' %}">
+{% endblock head %}
+{% block body %}
+<div class="row m-3">
+    <div class="col-8 map-container">
+        <div id="map"></div>
+    </div>
+    <div class="col-4">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#ranking-tab-pane" type="button" role="tab" aria-controls="ranking-tab-pane" aria-selected="true">Ranking</button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#search-tab-pane" type="button" role="tab" aria-controls="search-tab-pane" aria-selected="false">Search</button>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="ranking-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                {% include 'interactive_map/ranking_tab.html' %}
+            </div>
+            <div class="tab-pane fade" id="search-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                {% include 'interactive_map/search_tab.html' %}
+            </div>
+          </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block javascript %}
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+<script type="module" src="{% static 'scripts/interactive_map.js' %}"></script>
+{% endblock javascript %}
