@@ -1,3 +1,4 @@
+from zipfile import ZipFile
 import django
 from tqdm import tqdm
 django.setup()
@@ -7,8 +8,13 @@ from flights.models import Airport, Flight
 from cities.models import City
 
 
+with ZipFile("./data/flights.zip", "r") as zip:
+    with open("./data/flights.csv", "wb") as f:
+        f.write(zip.read("Origin_and_Destination_Survey_DB1BMarket_2022_1.csv"))
+
+
 print("import cities")
-records = pd.read_csv("./data/city.csv", sep=",").fillna("").to_dict("records")
+records = pd.read_csv("./data/cities.csv", sep=",").fillna("").to_dict("records")
 cities = []
 for record in tqdm(records):
     cities.append(City(
@@ -25,13 +31,14 @@ for record in tqdm(records):
 City.objects.bulk_create(cities)
 print("import cities done")
 
+
 print("import airports")
-records = pd.read_csv("./data/T_MASTER_CORD.csv", sep=",").fillna("")
+records = pd.read_csv("./data/airports.csv", sep=",").fillna("")
 records = records.drop_duplicates(subset='AIRPORT_ID', keep="last").to_dict("records")
 airports = []
 cities = {(city.city, city.state_id): city for city in City.objects.all()}
 for record in tqdm(records):
-    if int(record["AIRPORT_ID"]) == 99999:
+    if int(record["AIRPORT_ID"]) == 99999:  # ignore unknown point in Alaska
         continue
     description = f"{record['DISPLAY_AIRPORT_CITY_NAME_FULL']}: {record['DISPLAY_AIRPORT_NAME']}"
     city_name = record["DISPLAY_AIRPORT_CITY_NAME_FULL"].split(",")[0].strip()
@@ -55,8 +62,9 @@ for record in tqdm(records):
 Airport.objects.bulk_create(airports)
 print("import airport done")
 
+
 print("import flights")
-limit_bulk = 1000000 # create partially because of memory
+limit_bulk = 500000 # create partially because of memory
 airports = {airport.code: airport for airport in Airport.objects.all()}
 flights = []
 with pd.read_csv("./data/flights.csv", sep=",", chunksize=1000000) as reader:
