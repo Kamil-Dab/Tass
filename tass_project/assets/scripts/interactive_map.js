@@ -12,6 +12,7 @@ $( document ).ready(function() {
     }).addTo(map);
     rankingHandler(map);
     searchHandler(map);
+    heatMapHandler(map);
 });
 
 function setupRatingSlider() {
@@ -53,6 +54,36 @@ function setupPopulationSlider() {
             output.text(outputStr);
         }
     })
+}
+
+function heatMapHandler(map) {
+    $.ajax({
+        url: "/api/city/rating",
+        type: "GET",
+        success: function(response){
+            let heatMapData = [];
+            response.forEach(function(city) {
+                heatMapData.push([city.lat, city.lng, city.rating]);
+            });
+            let normalizedValues = heatMapData.map(function (v) {
+                return [v[0], v[1], v[2] / 10.0];
+            });
+            let heat = L.heatLayer(normalizedValues, {
+                max: 10,
+                radius: 15,
+                blur: 10,
+            })
+            heat.addTo(map);
+            map.removeLayer(heat);
+            $(".city-tab").on("click", function() {
+                if ($(this).attr("id") !== "heat-map-tab") {
+                    map.removeLayer(heat);
+                } else {
+                    map.addLayer(heat);
+                }
+            })
+        }
+    });
 }
 
 function rankingHandler(map) {
@@ -100,7 +131,6 @@ function fillSearchTable(data) {
 
 function createMarkersForRows(map, rows, currentTab) {
     let markers = []
-    let otherTab = currentTab === "ranking-tab" ? "search-tab" : "ranking-tab";
     let topCityColors = generateGradient('#ff9933', '#00ff99', $(rows).length);
     $(rows).each(function(i) {
         const color = '#' + topCityColors[i];
@@ -111,11 +141,12 @@ function createMarkersForRows(map, rows, currentTab) {
         const rating = $(this).find(".city-rating").text();
         const marker = new CustomMarker(lat, lng, label, color, rating);
         marker.marker.addTo(map);
-        $("#" + otherTab).on("click", function() {
-            map.removeLayer(marker.marker);
-        })
-        $("#" + currentTab).on("click", function() {
-            map.addLayer(marker.marker);
+        $(".city-tab").on("click", function() {
+            if ($(this).attr("id") !== currentTab) {
+                map.removeLayer(marker.marker);
+            } else {
+                map.addLayer(marker.marker);
+            }
         })
         marker.marker.on("mouseover", () => marker.marker.openPopup())
         marker.marker.on("mouseout", () => marker.marker.closePopup())

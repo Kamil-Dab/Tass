@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.generic.base import RedirectView
-from flights.views import MapView, CityView
+from flights.views import CityRatingView, MapView, CityView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -24,4 +24,5 @@ urlpatterns = [
     path('', RedirectView.as_view(url='map/', permanent=True), name='index'),
     
     path("api/city/", CityView.as_view()),
+    path("api/city/rating", CityRatingView.as_view()),
 ]
