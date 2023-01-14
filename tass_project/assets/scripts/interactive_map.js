@@ -12,7 +12,6 @@ $( document ).ready(function() {
     }).addTo(map);
     rankingHandler(map);
     searchHandler(map);
-    heatMapHandler(map);
 });
 
 function setupRatingSlider() {
@@ -56,32 +55,6 @@ function setupPopulationSlider() {
     })
 }
 
-function heatMapHandler(map) {
-    $.ajax({
-        url: "/api/city/rating",
-        type: "GET",
-        success: function(response){
-            let heatMapData = [];
-            response.forEach(function(city) {
-                heatMapData.push([city.lat, city.lng, city.rating]);
-            });
-            let heat = L.heatLayer(heatMapData, {
-                max: 10,
-                radius: 50,
-                blur: 15,
-            })
-            heat.addTo(map);
-            map.removeLayer(heat);
-            $(".city-tab").on("click", function() {
-                if ($(this).attr("id") !== "heat-map-tab") {
-                    map.removeLayer(heat);
-                } else {
-                    map.addLayer(heat);
-                }
-            })
-        }
-    });
-}
 
 function rankingHandler(map) {
     createMarkersForRows(map, $("#top-city-table").find(".city-row"), "ranking-tab");
@@ -150,7 +123,11 @@ function createMarkersForRows(map, rows, currentTab) {
         $(this).on("mouseover", function() {
             $(this).css("background-color", "#6200ff");
             marker.changeColor("#6200ff");
+            // marker.marker.openPopup();
+        })
+        $(this).on("click", function() {
             marker.marker.openPopup();
+            map.setView(marker.marker.getLatLng(), 5);
         })
         $(this).on("mouseout", function() {
             $(this).css("background-color", color);

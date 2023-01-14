@@ -38,11 +38,3 @@ class CityView(APIView):
         if query:
             filters["city__icontains"] = query
         return Response(CitySerializer(City.objects.filter(**filters), many=True).data[:100])
-
-
-class CityRatingView(APIView):
-    "Retrieve only rating values with latlng for heat map"
-
-    def get(self, request: Request):
-        cities = City.objects.filter(rating__gt=0).values("lat", "lng", "rating")
-        return Response(list(cities))
