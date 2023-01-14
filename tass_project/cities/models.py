@@ -12,3 +12,6 @@ class City(models.Model):
     density = models.FloatField(null=False, blank=False)
     timezone = models.CharField(max_length=80, null=False, blank=False)
     rating = models.FloatField(default=0.0, null=False, blank=False)
+
+    def __str__(self):
+        return self.city

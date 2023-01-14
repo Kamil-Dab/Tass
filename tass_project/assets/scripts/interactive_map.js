@@ -65,13 +65,10 @@ function heatMapHandler(map) {
             response.forEach(function(city) {
                 heatMapData.push([city.lat, city.lng, city.rating]);
             });
-            let normalizedValues = heatMapData.map(function (v) {
-                return [v[0], v[1], v[2] / 10.0];
-            });
-            let heat = L.heatLayer(normalizedValues, {
+            let heat = L.heatLayer(heatMapData, {
                 max: 10,
-                radius: 15,
-                blur: 10,
+                radius: 50,
+                blur: 15,
             })
             heat.addTo(map);
             map.removeLayer(heat);
