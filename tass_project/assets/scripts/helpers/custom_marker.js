@@ -1,7 +1,7 @@
 export default class CustomMarker {
     constructor(lat, lng, label, color, rating) {
         this.rating = parseFloat(rating).toFixed(1);
-        this.uuid = Math.random().toString(16).slice(2);
+        this.uuid = "S" + Math.random().toString(16).slice(2);
         this.marker = new L.Marker([lat, lng], {
             icon: this.setupStyle(color)
         });
